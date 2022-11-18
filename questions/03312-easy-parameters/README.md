@@ -10,4 +10,22 @@ const foo = (arg1: string, arg2: number): void => {}
 type FunctionParamsType = MyParameters<typeof foo> // [arg1: string, arg2: number]
 ```
 
+Solution:
+
+```ts
+type MyParameters<T extends (...args: any[]) => any> = T extends (
+  ...args: infer U
+) => any
+  ? U
+  : never
+```
+
+Process:
+
+- MyParameters returns a tuple type of a function's arguments
+- Extends within arrow brackets specifies a contrainst, T must be a function (...args: any[]) => any
+- Type conditional statement will always return true since only functions are accepted. This is just a hack so we can assign a variable to args, using infer
+- `...args: infer U` converts arguments to an inferred array type eg. `[string, number]`
+- We return type U, which will be a tuple of the function's argument types
+
 <!--info-footer-start--><br><a href="../../README.md" target="_blank"><img src="https://img.shields.io/badge/-Back-grey" alt="Back"/></a> <a href="https://tsch.js.org/3312/answer" target="_blank"><img src="https://img.shields.io/badge/-Share%20your%20Solutions-teal" alt="Share your Solutions"/></a> <a href="https://tsch.js.org/3312/solutions" target="_blank"><img src="https://img.shields.io/badge/-Check%20out%20Solutions-de5a77?logo=awesome-lists&logoColor=white" alt="Check out Solutions"/></a> <!--info-footer-end-->
